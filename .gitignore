@@ -251,3 +251,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/osx,venv,linux,macos,windows,virtualenv,pycharm+all,jetbrains+all,visualstudiocode
+
+
+hand_testing.py
+*.pyc
