@@ -1,0 +1,194 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import json
+from pprint import pprint
+
+
+class HostDoesNotExist(Exception):
+    """Used when trying to use a host that does not exist."""
+    pass
+
+
+class HostAlreadyExist(Exception):
+    """Used when trying to add a host that already exist"""
+    pass
+
+
+class GroupAlreadyExist(Exception):
+    """Used when trying to add a group that already exist."""
+    pass
+
+
+class GroupDoesNotExist(Exception):
+    """Used when trying to use a group that does not exist."""
+
+
+class AwxInventory:
+    """Inventory for Ansible and AWX.
+
+    Allows the creation of inventories to be used with Ansible.
+    Can be used with any dict encoder that has a dumps method. see export method.
+    """
+
+    def __init__(self):
+        self.hosts = {}
+        self.groups = {}
+
+    def add_host(self, vm_id, vm_vars=None, groups=None):
+        """Add a vm to inventory, Optionally add vars to that vm, and
+           Optionally add groups to that vm.
+
+           If groups are provided this function will create the group if it does not exist and
+           then add the vm to the group.
+
+        Arguments:
+            vm_id   {str}     -- ID of the VM in source api. In vmware this would look like: vm-143230
+            vars    {dict}    -- Vars that should be added to this vm.
+            groups  {list}    -- Groups this vm is a member of.
+        """
+        if vm_id in self.hosts:
+            raise HostAlreadyExist
+
+        self.hosts[vm_id] = {}
+
+        if vm_vars != None:
+            self.add_host_vars(vm_id, vm_vars)
+
+        if groups != None:
+            for group in groups:
+                try:
+                    self.groups[group]
+                except KeyError:
+                    self.add_group(group)
+
+                self.add_host_to_group(vm_id, group)
+
+    def remove_host(self, vm_id):
+        """Remove a vm from the inventory.
+
+        Arguments:
+            vm_id {str} -- ID of the VM in source api. In vmware this would look like: vm-143230
+        """
+
+        # Remove host from hosts list.
+        try:
+            self.hosts.pop(vm_id)
+        except KeyError:
+            pass
+
+        # Remove host from all groups
+        for k, v in self.groups.items():
+            try:
+                self.groups[k]['hosts'].pop(vm_id)
+            except KeyError:
+                pass
+
+    def add_group(self, name, group_vars=None, hosts=None):
+        """Add a group to inventory, Optionally add group vars, and Optionally add hosts of the group.
+
+        Arguments:
+            name {str} -- Name of the group
+            vars {dict} -- Vars that should be added to this group
+            hosts {list} -- VMs that should be added to this group.
+        """
+        if name in self.groups:
+            raise GroupAlreadyExist
+
+        self.groups[name] = {}
+
+        if group_vars != None:
+            self.add_group_vars(name, group_vars)
+
+        if hosts != None:
+            for host in hosts:
+                self.add_host_to_group(host, name)
+
+    def add_host_vars(self, name, host_vars):
+        """Add vars to an existing name.
+           This will over write vars with matching keys.
+
+        Arguments:
+            :type name: str         -- ID of the VM in source api. In vmware this would look like: name-143230
+            :type host_vars: dict   -- Vars that should be added to this name.
+        """
+        # Make sure host exist
+        try:
+            self.hosts[name]
+        except KeyError:
+            raise HostDoesNotExist
+
+        # make sure the host has the vars key
+        try:
+            self.hosts[name]['vars']
+        except KeyError:
+            self.hosts[name]['vars'] = {}
+
+        # Patch the keys in host vars
+        for k, v in host_vars.items():
+            self.hosts[name]['vars'][k] = v
+
+    def add_group_vars(self, group, group_vars):
+        """Add vars to an existing group.
+           This will over write vars with matching keys.
+
+        Arguments:
+            :type group: str -- Name of group in inventory
+            :type group_vars: dict -- Vars that should be added to this group.
+        """
+        # Make sure the group exist
+        try:
+            self.groups[group]
+
+        except KeyError:
+            raise GroupDoesNotExist
+
+        # Make sure the group has the vars key
+        try:
+            self.groups[group]['vars']
+        except KeyError:
+            self.groups[group]['vars'] = {}
+
+        # Patch the keys in group vars
+        for k, v in group_vars.items():
+            self.groups[group]['vars'][k] = v
+
+    def add_host_to_group(self, host, group):
+        """Add host to group.
+
+        Arguments:
+            host {str}    -- ID of the VM in source api. In vmware this would look like: host-143230
+            group {str} -- Name of group in inventory
+        """
+        # Make sure host exist
+        try:
+            self.hosts[host]
+        except KeyError:
+            raise HostDoesNotExist
+
+        # Make sure group exist
+        try:
+            self.groups[group]
+        except KeyError:
+            raise GroupDoesNotExist
+
+        # Make sure group has hosts key
+        try:
+            self.groups[group]['hosts']
+        except KeyError:
+            self.groups[group]['hosts'] = {}
+
+        self.groups[group]['hosts'][host] = {}
+
+    def export(self, encoder=json):
+        """Convert from object to string using the dumps method of the encoder class.
+
+        Keyword Arguments:
+            encoder {module} -- Class to encode dict to output string. (default: {json})
+        """
+        awx_inv = self.groups
+
+        awx_inv['all'] = {}
+        awx_inv['all']['hosts'] = self.hosts
+
+        return encoder.dumps(awx_inv, indent=2)
