@@ -1,5 +1,6 @@
 # inventory
-[![Build Status](https://travis-ci.org/cblack34/inventory.svg?branch=master)](https://travis-ci.org/cblack34/inventory)
+[![Build Status](https://travis-ci.org/cblack34/inventory.svg?branch=master)](https://travis-ci.org/cblack34/inventory)  
+
 Build inventories of computers that can be grouped. Mainly for use with awx/ansible dynamic inventory.
 
 
