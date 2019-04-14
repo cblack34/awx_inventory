@@ -1,4 +1,3 @@
-import unittest
 from unittest import TestCase
 
 from test.support.assert_valid_schema import AssertValidSchema
@@ -43,9 +42,7 @@ class TestAwxInventory(TestCase, AssertValidSchema):
         inv.add_host('host1', test_host_vars)
 
         test_dict = {
-            'host1': {
-                'vars': test_host_vars
-            }
+            'host1': test_host_vars
         }
 
         self.assertDictEqual(inv.hosts, test_dict)
@@ -76,9 +73,9 @@ class TestAwxInventory(TestCase, AssertValidSchema):
 
         test_dict = {
             'group1': {
-                'hosts': {
-                    'host1': {}
-                }
+                'hosts': [
+                    'host1'
+                ]
             }
         }
 
@@ -98,13 +95,13 @@ class TestAwxInventory(TestCase, AssertValidSchema):
             'var2': 'val2',
         }
 
-        inv.add_host('host1', vm_vars=test_host_vars, groups=test_groups)
+        inv.add_host('host1', host_vars=test_host_vars, groups=test_groups)
 
         test_group_dict = {
             'group1': {
-                'hosts': {
-                    'host1': {}
-                }
+                'hosts': [
+                    'host1'
+                ]
             }
         }
 
@@ -124,12 +121,10 @@ class TestAwxInventory(TestCase, AssertValidSchema):
             'var2': 'val2',
         }
 
-        inv.add_host('host1', vm_vars=test_host_vars, groups=test_groups)
+        inv.add_host('host1', host_vars=test_host_vars, groups=test_groups)
 
         test_host_dict = {
-            'host1': {
-                'vars': test_host_vars
-            }
+            'host1': test_host_vars
         }
 
         self.assertDictEqual(inv.hosts, test_host_dict)
@@ -164,19 +159,6 @@ class TestAwxInventory(TestCase, AssertValidSchema):
 
         self.assertDictEqual(inv.hosts, test_dict)
 
-    # def test_remove_host_removes_hosts_dict_if_empty(self):
-    #     from inventory import AwxInventory
-    #
-    #     inv = AwxInventory()
-    #     inv.add_host('host1')
-    #
-    #     inv.remove_host('host1')
-    #
-    #     self.assertIsInstance(inv.hosts, dict)
-    #
-    #     with self.assertRaises(AttributeError):
-    #         inv.hosts
-
     def test_remove_host_from_groups(self):
         from inventory import AwxInventory
 
@@ -190,9 +172,9 @@ class TestAwxInventory(TestCase, AssertValidSchema):
 
         test_dict = {
             'group1': {
-                'hosts': {
-                    'host1': {}
-                }
+                'hosts': [
+                    'host1'
+                ]
             }
         }
 
@@ -257,10 +239,10 @@ class TestAwxInventory(TestCase, AssertValidSchema):
 
         test_dict = {
             'group1': {
-                'hosts': {
-                    'host1': {},
-                    'host2': {}
-                }
+                'hosts': [
+                    'host1',
+                    'host2'
+                ]
             }
         }
 
@@ -304,10 +286,10 @@ class TestAwxInventory(TestCase, AssertValidSchema):
 
         test_dict = {
             'group1': {
-                'hosts': {
-                    'host1': {},
-                    'host2': {}
-                },
+                'hosts': [
+                    'host1',
+                    'host2'
+                ],
 
                 'vars': group_vars
 
@@ -334,9 +316,7 @@ class TestAwxInventory(TestCase, AssertValidSchema):
         inv.add_host_vars('host1', test_host_vars)
 
         test_dict = {
-            'host1': {
-                'vars': test_host_vars
-            }
+            'host1': test_host_vars
         }
 
         self.assertDictEqual(inv.hosts, test_dict)
@@ -358,10 +338,8 @@ class TestAwxInventory(TestCase, AssertValidSchema):
 
         test_dict = {
             'host1': {
-                'vars': {
-                    'var1': 'val1',
-                    'var2': 'val3',
-                }
+                'var1': 'val1',
+                'var2': 'val3',
             }
         }
 
@@ -437,9 +415,9 @@ class TestAwxInventory(TestCase, AssertValidSchema):
 
         test_dict = {
             'group1': {
-                'hosts': {
-                    'host1': {}
-                }
+                'hosts': [
+                    'host1'
+                ]
             }
         }
 
