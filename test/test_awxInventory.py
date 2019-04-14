@@ -1,9 +1,7 @@
+import unittest
 from unittest import TestCase
 
-from test.support.assert_valid_schema import AssertValidSchema
-
-
-class TestAwxInventory(TestCase, AssertValidSchema):
+class TestAwxInventory(TestCase):
 
     ##########################################
     #         add_host Test
@@ -468,3 +466,5 @@ class TestAwxInventory(TestCase, AssertValidSchema):
     #
     #     self.assertDictEqual(export, {})
 
+if __name__ == '__main__':
+    unittest.main()
