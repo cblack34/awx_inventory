@@ -180,6 +180,11 @@ class AwxInventory:
         Keyword Arguments:
             encoder {module} -- Class to encode dict to output string. (default: {json})
         """
+
+        self.add_group('all')
+        for k, v in self.hosts.items():
+            self.add_host_to_group(k, 'all')
+
         awx_inv = self.groups
 
         awx_inv['_meta'] = {}
