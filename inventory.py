@@ -181,11 +181,19 @@ class AwxInventory:
             encoder {module} -- Class to encode dict to output string. (default: {json})
         """
 
+        # dict that will be dumped to screen.
+        awx_inv = {}
+
+
+        # Add 'all' group and add all host to group.
         self.add_group('all')
         for k, v in self.hosts.items():
             self.add_host_to_group(k, 'all')
 
-        awx_inv = self.groups
+        # Add non-empty groups to export.
+        for group in self.groups:
+            if len(self.groups[group]) > 0:
+                awx_inv[group] = self.groups[group]
 
         awx_inv['_meta'] = {}
         awx_inv['_meta']['hostvars'] = self.hosts
