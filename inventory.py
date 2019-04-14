@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import json
-from pprint import pprint
 
 
 class HostDoesNotExist(Exception):
@@ -35,7 +34,7 @@ class AwxInventory:
         self.hosts = {}
         self.groups = {}
 
-    def add_host(self, vm_id, vm_vars=None, groups=None):
+    def add_host(self, name, host_vars=None, groups=None):
         """Add a vm to inventory, Optionally add vars to that vm, and
            Optionally add groups to that vm.
 
@@ -43,17 +42,17 @@ class AwxInventory:
            then add the vm to the group.
 
         Arguments:
-            vm_id   {str}     -- ID of the VM in source api. In vmware this would look like: vm-143230
+            name   {str}     -- ID of the VM in source api. In vmware this would look like: vm-143230
             vars    {dict}    -- Vars that should be added to this vm.
             groups  {list}    -- Groups this vm is a member of.
         """
-        if vm_id in self.hosts:
+        if name in self.hosts:
             raise HostAlreadyExist
 
-        self.hosts[vm_id] = {}
+        self.hosts[name] = {}
 
-        if vm_vars != None:
-            self.add_host_vars(vm_id, vm_vars)
+        if host_vars != None:
+            self.add_host_vars(name, host_vars)
 
         if groups != None:
             for group in groups:
@@ -62,25 +61,25 @@ class AwxInventory:
                 except KeyError:
                     self.add_group(group)
 
-                self.add_host_to_group(vm_id, group)
+                self.add_host_to_group(name, group)
 
-    def remove_host(self, vm_id):
+    def remove_host(self, host_name):
         """Remove a vm from the inventory.
 
         Arguments:
-            vm_id {str} -- ID of the VM in source api. In vmware this would look like: vm-143230
+            host_name {str} -- ID of the VM in source api. In vmware this would look like: vm-143230
         """
 
         # Remove host from hosts list.
         try:
-            self.hosts.pop(vm_id)
+            self.hosts.pop(host_name)
         except KeyError:
             pass
 
         # Remove host from all groups
         for k, v in self.groups.items():
             try:
-                self.groups[k]['hosts'].pop(vm_id)
+                self.groups[k]['hosts'].remove(host_name)
             except KeyError:
                 pass
 
@@ -118,15 +117,10 @@ class AwxInventory:
         except KeyError:
             raise HostDoesNotExist
 
-        # make sure the host has the vars key
-        try:
-            self.hosts[name]['vars']
-        except KeyError:
-            self.hosts[name]['vars'] = {}
 
         # Patch the keys in host vars
         for k, v in host_vars.items():
-            self.hosts[name]['vars'][k] = v
+            self.hosts[name][k] = v
 
     def add_group_vars(self, group, group_vars):
         """Add vars to an existing group.
@@ -176,9 +170,9 @@ class AwxInventory:
         try:
             self.groups[group]['hosts']
         except KeyError:
-            self.groups[group]['hosts'] = {}
+            self.groups[group]['hosts'] = []
 
-        self.groups[group]['hosts'][host] = {}
+        self.groups[group]['hosts'].append(host)
 
     def export(self, encoder=json):
         """Convert from object to string using the dumps method of the encoder class.
@@ -188,7 +182,7 @@ class AwxInventory:
         """
         awx_inv = self.groups
 
-        awx_inv['all'] = {}
-        awx_inv['all']['hosts'] = self.hosts
+        awx_inv['_meta'] = {}
+        awx_inv['_meta']['hostvars'] = self.hosts
 
         return encoder.dumps(awx_inv, indent=2)
