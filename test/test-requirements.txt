@@ -1,0 +1,6 @@
+attrs==19.1.0
+coverage==4.5.3
+functools32==3.2.3.post2
+jsonschema==3.0.1
+pyrsistent==0.14.11
+six==1.12.0
