@@ -1,6 +1,8 @@
 import unittest
 from unittest import TestCase
 
+from inventory import AwxInventory
+
 class TestAwxInventory(TestCase):
 
     ##########################################
@@ -8,7 +10,6 @@ class TestAwxInventory(TestCase):
     ##########################################
 
     def test_add_host_creates_host_dict(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
         inv.add_host('host1')
@@ -16,7 +17,6 @@ class TestAwxInventory(TestCase):
         self.assertIsInstance(inv.hosts, dict)
 
     def test_add_host_dict_value(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
         inv.add_host('host1')
@@ -28,7 +28,7 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.hosts, test_dict)
 
     def test_add_host_with_vars(self):
-        from inventory import AwxInventory
+
 
         inv = AwxInventory()
 
@@ -46,7 +46,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.hosts, test_dict)
 
     def test_add_host_with_groups_creates_group_dict(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -59,7 +58,6 @@ class TestAwxInventory(TestCase):
         self.assertIsInstance(inv.groups, dict)
 
     def test_add_host_with_groups_creates_group_dict_values(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -80,7 +78,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.groups, test_dict)
 
     def test_add_host_with_vars_and_groups_dict_values_group(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -106,7 +103,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.groups, test_group_dict)
 
     def test_add_host_with_vars_and_groups_dict_values_host(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -128,7 +124,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.hosts, test_host_dict)
 
     def test_add_host_that_already_exist_raises_exception(self):
-        from inventory import AwxInventory
         from inventory import HostAlreadyExist
 
         inv = AwxInventory()
@@ -143,7 +138,6 @@ class TestAwxInventory(TestCase):
     ##########################################
 
     def test_remove_host(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
         inv.add_host('host1')
@@ -158,7 +152,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.hosts, test_dict)
 
     def test_remove_host_from_groups(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
         inv.add_host('host1')
@@ -183,7 +176,6 @@ class TestAwxInventory(TestCase):
     ##########################################
 
     def test_add_group_creates_dict(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -192,7 +184,6 @@ class TestAwxInventory(TestCase):
         self.assertIsInstance(inv.groups, dict)
 
     def test_add_group_dict_value(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -205,7 +196,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.groups, test_dict)
 
     def test_add_group_with_vars_dict_value(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -224,7 +214,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.groups, test_dict)
 
     def test_add_group_with_hosts(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -247,7 +236,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.groups, test_dict)
 
     def test_add_group_with_members_that_do_not_exist_raises_exception(self):
-        from inventory import AwxInventory
         from inventory import HostDoesNotExist
 
         inv = AwxInventory()
@@ -256,7 +244,6 @@ class TestAwxInventory(TestCase):
             inv.add_group('group1', hosts=['non_existing_host'])
 
     def test_add_group_that_already_exist_raises_exception(self):
-        from inventory import AwxInventory
         from inventory import GroupAlreadyExist
 
         inv = AwxInventory()
@@ -267,7 +254,6 @@ class TestAwxInventory(TestCase):
             inv.add_group('group1')
 
     def test_add_group_with_members_and_vars(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -301,7 +287,6 @@ class TestAwxInventory(TestCase):
     ##########################################
 
     def test_add_host_vars(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
         inv.add_host('host1')
@@ -320,7 +305,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.hosts, test_dict)
 
     def test_add_host_vars_replace_vars(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
         inv.add_host('host1')
@@ -344,7 +328,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.hosts, test_dict)
 
     def test_add_host_vars_host_not_exist_raises_exception(self):
-        from inventory import AwxInventory
         from inventory import HostDoesNotExist
 
         inv = AwxInventory()
@@ -362,7 +345,6 @@ class TestAwxInventory(TestCase):
     ##########################################
 
     def test_add_group_vars(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -384,7 +366,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.groups, test_dict)
 
     def test_add_group_vars_group_does_not_exist_raises_exception(self):
-        from inventory import AwxInventory
         from inventory import GroupDoesNotExist
 
         inv = AwxInventory()
@@ -402,7 +383,6 @@ class TestAwxInventory(TestCase):
     ##########################################
 
     def test_add_host_to_group(self):
-        from inventory import AwxInventory
 
         inv = AwxInventory()
 
@@ -422,7 +402,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.groups, test_dict)
 
     def test_add_host_to_group_raises_exception_no_host(self):
-        from inventory import AwxInventory
         from inventory import HostDoesNotExist
 
         inv = AwxInventory()
@@ -433,7 +412,6 @@ class TestAwxInventory(TestCase):
             inv.add_host_to_group('host1', 'group1')
 
     def test_add_host_to_group_raises_exception_no_group(self):
-        from inventory import AwxInventory
         from inventory import GroupDoesNotExist
 
         inv = AwxInventory()
