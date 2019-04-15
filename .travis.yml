@@ -4,8 +4,11 @@ python:
 cache: pip
 before_install:
   - pip install -U pip
+  - pip install coveralls
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 install:
   - pip install -r test/test-requirements.txt
 script:
-  - python test/test_awxInventory.py
+  - coverage run --omit test/ test/test_awxInventory.py
+after_success:
+    coveralls
