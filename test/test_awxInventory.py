@@ -151,7 +151,7 @@ class TestAwxInventory(TestCase):
 
         self.assertDictEqual(inv.hosts, test_dict)
 
-    def test_remove_host_from_groups(self):
+    def test_remove_host_from_group(self):
 
         inv = AwxInventory()
         inv.add_host('host1')
@@ -163,6 +163,32 @@ class TestAwxInventory(TestCase):
 
         test_dict = {
             'group1': {
+                'hosts': [
+                    'host1'
+                ]
+            }
+        }
+
+        self.assertDictEqual(inv.groups, test_dict)
+
+    def test_remove_host_from_group_when_not_in_one_of_the_groups(self):
+
+        inv = AwxInventory()
+        inv.add_host('host1')
+        inv.add_host('host2')
+
+        inv.add_group('group1', hosts=['host1', 'host2'])
+        inv.add_group('group2', hosts=['host1'])
+
+        inv.remove_host('host2')
+
+        test_dict = {
+            'group1': {
+                'hosts': [
+                    'host1'
+                ]
+            },
+            'group2': {
                 'hosts': [
                     'host1'
                 ]
@@ -377,6 +403,70 @@ class TestAwxInventory(TestCase):
 
         with self.assertRaises(GroupDoesNotExist):
             inv.add_group_vars('group1', test_vars)
+
+    ##########################################
+    #         remove_group Test
+    ##########################################
+
+    def test_remove_group(self):
+        inv = AwxInventory()
+
+        inv.add_group('group1')
+        inv.add_group('group2')
+
+        inv.remove_group('group1')
+
+        test_dict = {
+            'group2': {}
+        }
+
+        self.assertDictEqual(inv.groups, test_dict)
+
+    def test_remove_group_with_host_check_hosts_host_remain(self):
+        inv = AwxInventory()
+
+        inv.add_host('host1')
+        inv.add_host('host2')
+        inv.add_host('host3')
+
+        inv.add_group('group1')
+        inv.add_group('group2')
+
+        inv.add_host_to_group('host1', 'group1')
+        inv.add_host_to_group('host2', 'group2')
+        inv.add_host_to_group('host3', 'group1')
+
+        inv.remove_group('group1')
+
+        test_dict = {
+            'host1': {},
+            'host2': {},
+            'host3': {}
+        }
+
+        self.assertDictEqual(inv.hosts, test_dict)
+
+    def test_remove_group_with_host_check_hosts_host_removed(self):
+        inv = AwxInventory()
+
+        inv.add_host('host1')
+        inv.add_host('host2')
+        inv.add_host('host3')
+
+        inv.add_group('group1')
+        inv.add_group('group2')
+
+        inv.add_host_to_group('host1', 'group1')
+        inv.add_host_to_group('host2', 'group2')
+        inv.add_host_to_group('host3', 'group1')
+
+        inv.remove_group('group1', delete_host=True)
+
+        test_dict = {
+            'host2': {}
+        }
+
+        self.assertDictEqual(inv.hosts, test_dict)
 
     ##########################################
     #         add_host_to_group Test
