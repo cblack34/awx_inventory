@@ -63,6 +63,25 @@ class AwxInventory:
 
                 self.add_host_to_group(name, group)
 
+    def add_host_vars(self, name, host_vars):
+        """Add vars to an existing name.
+           This will over write vars with matching keys.
+
+        Arguments:
+            :type name: str         -- ID of the VM in source api. In vmware this would look like: name-143230
+            :type host_vars: dict   -- Vars that should be added to this name.
+        """
+        # Make sure host exist
+        try:
+            self.hosts[name]
+        except KeyError:
+            raise HostDoesNotExist
+
+
+        # Patch the keys in host vars
+        for k, v in host_vars.items():
+            self.hosts[name][k] = v
+
     def remove_host(self, host_name):
         """Remove a vm from the inventory.
 
@@ -70,18 +89,21 @@ class AwxInventory:
             host_name {str} -- ID of the VM in source api. In vmware this would look like: vm-143230
         """
 
-        # Remove host from hosts list.
-        try:
-            self.hosts.pop(host_name)
-        except KeyError:
-            pass
-
         # Remove host from all groups
         for k, v in self.groups.items():
             try:
                 self.groups[k]['hosts'].remove(host_name)
             except KeyError:
                 pass
+            except ValueError:
+                pass
+
+        # Remove host from hosts list.
+        try:
+            self.hosts.pop(host_name)
+        except KeyError:
+            pass
+
 
     def add_group(self, name, group_vars=None, hosts=None):
         """Add a group to inventory, Optionally add group vars, and Optionally add hosts of the group.
@@ -102,25 +124,6 @@ class AwxInventory:
         if hosts != None:
             for host in hosts:
                 self.add_host_to_group(host, name)
-
-    def add_host_vars(self, name, host_vars):
-        """Add vars to an existing name.
-           This will over write vars with matching keys.
-
-        Arguments:
-            :type name: str         -- ID of the VM in source api. In vmware this would look like: name-143230
-            :type host_vars: dict   -- Vars that should be added to this name.
-        """
-        # Make sure host exist
-        try:
-            self.hosts[name]
-        except KeyError:
-            raise HostDoesNotExist
-
-
-        # Patch the keys in host vars
-        for k, v in host_vars.items():
-            self.hosts[name][k] = v
 
     def add_group_vars(self, group, group_vars):
         """Add vars to an existing group.
@@ -146,6 +149,20 @@ class AwxInventory:
         # Patch the keys in group vars
         for k, v in group_vars.items():
             self.groups[group]['vars'][k] = v
+
+    def remove_group(self, group, delete_host=False):
+        if delete_host:
+            try:
+                hosts = list(self.groups[group]['hosts'])
+
+            except KeyError:
+                pass
+
+            for host in hosts:
+                self.remove_host(host)
+
+        self.groups.pop(group)
+
 
     def add_host_to_group(self, host, group):
         """Add host to group.
