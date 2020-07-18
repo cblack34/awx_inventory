@@ -5,7 +5,7 @@ import json
 
 
 class HostDoesNotExist(Exception):
-    
+
     """Used when trying to use a host that does not exist."""
     pass
 
@@ -40,8 +40,7 @@ class AwxInventory:
         self.groups = {}
 
     def add_host(self, name, host_vars=None, groups=None):
-        
-        """Add a vm to inventory, 
+        """Add a vm to inventory,
         
            Optionally add vars to that vm, and Optionally add groups to that vm.
            If groups are provided this function will create the group if it does not exist and
