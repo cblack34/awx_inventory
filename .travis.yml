@@ -14,4 +14,4 @@ script:
   - coverage xml --omit test/
 after_success:
   - coveralls
-  - bash <(curl -Ls https://coverage.codacy.com/get.sh) -r coverage.xml
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Python -r coverage.xml
