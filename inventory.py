@@ -5,7 +5,6 @@ import json
 
 
 class HostDoesNotExist(Exception):
-
     """
     Used when trying to use a host that does not exist.
     """
@@ -13,7 +12,6 @@ class HostDoesNotExist(Exception):
 
 
 class HostAlreadyExist(Exception):
-    
     """
     Used when trying to add a host that already exist
     """
@@ -21,7 +19,6 @@ class HostAlreadyExist(Exception):
 
 
 class GroupAlreadyExist(Exception):
-    
     """
     Used when trying to add a group that already exist.
     """
@@ -29,14 +26,12 @@ class GroupAlreadyExist(Exception):
 
 
 class GroupDoesNotExist(Exception):
-    
     """
     Used when trying to use a group that does not exist.
     """
 
 
 class AwxInventory:
-    
     """
     Inventory for Ansible and AWX.
 
@@ -45,18 +40,16 @@ class AwxInventory:
     """
 
     def __init__(self):
-        """
-        Create instance variables.
-        """
+        """Create instance variables."""
         self.hosts = {}
         self.groups = {}
 
     def add_host(self, name, host_vars=None, groups=None):
-        """Add a vm to inventory,
-        
-           Optionally add vars to that vm, and Optionally add groups to that vm.
-           If groups are provided this function will create the group if it does not exist and
-           then add the vm to the group.
+        """
+        Add a vm to inventory,
+        Optionally add vars to that vm, and Optionally add groups to that vm.
+        If groups are provided this function will create the group if it does not exist and
+        then add the vm to the group.
 
         Arguments:
             name   {str}     -- ID of the VM in source api. In vmware this would look like: vm-143230
@@ -209,13 +202,13 @@ class AwxInventory:
         self.groups[group]['hosts'].append(host)
 
     def export(self, encoder=json):
-        """Convert from object to string using the dumps method of the encoder class.
+        """
+        Convert from object to string using the dumps method of the encoder class.
         Keyword Arguments:
             encoder {module} -- Class to encode dict to output string. (default: {json})
         """
         # dict that will be dumped to screen.
         awx_inv = {}
-
 
         # Add 'all' group and add all host to group.
         self.add_group('all')
