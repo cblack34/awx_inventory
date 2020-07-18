@@ -1,6 +1,7 @@
 language: python
 python:
   - "3.6"
+  - "3.8"
 cache: pip
 before_install:
   - pip install -U pip
@@ -10,6 +11,7 @@ install:
   - pip install -r test/test-requirements.txt
 script:
   - coverage run --omit test/ test/test_awxInventory.py
+  - coverage xml --omit test/
   - ls
 after_success:
   - coveralls
