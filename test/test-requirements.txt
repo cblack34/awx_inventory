@@ -1,5 +1,5 @@
 attrs==19.3.0
-coverage==4.5.3
+coverage==5.2
 functools32==3.2.3.post2
 jsonschema==3.2.0
 pyrsistent==0.16.0
