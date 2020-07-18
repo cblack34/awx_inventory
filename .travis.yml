@@ -11,4 +11,5 @@ install:
 script:
   - coverage run --omit test/ test/test_awxInventory.py
 after_success:
-    coveralls
+  - coveralls
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh)
