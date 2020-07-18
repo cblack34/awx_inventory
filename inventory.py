@@ -45,8 +45,8 @@ class AwxInventory:
     """
 
     def __init__(self):
-        """ 
-        Create instance variables. 
+        """
+        Create instance variables.
         """
         self.hosts = {}
         self.groups = {}
