@@ -1,2 +1,1 @@
-"""Test Package for AWX Inventory.
-"""
+"""Test Package for AWX Inventory."""
