@@ -5,25 +5,30 @@ import json
 
 
 class HostDoesNotExist(Exception):
+    
     """Used when trying to use a host that does not exist."""
     pass
 
 
 class HostAlreadyExist(Exception):
+    
     """Used when trying to add a host that already exist"""
     pass
 
 
 class GroupAlreadyExist(Exception):
+    
     """Used when trying to add a group that already exist."""
     pass
 
 
 class GroupDoesNotExist(Exception):
+    
     """Used when trying to use a group that does not exist."""
 
 
 class AwxInventory:
+    
     """Inventory for Ansible and AWX.
 
     Allows the creation of inventories to be used with Ansible.
@@ -35,9 +40,10 @@ class AwxInventory:
         self.groups = {}
 
     def add_host(self, name, host_vars=None, groups=None):
-        """Add a vm to inventory, Optionally add vars to that vm, and
-           Optionally add groups to that vm.
-
+        
+        """Add a vm to inventory, 
+        
+           Optionally add vars to that vm, and Optionally add groups to that vm.
            If groups are provided this function will create the group if it does not exist and
            then add the vm to the group.
 
@@ -65,6 +71,7 @@ class AwxInventory:
 
     def add_host_vars(self, name, host_vars):
         """Add vars to an existing name.
+        
            This will over write vars with matching keys.
 
         Arguments:
@@ -88,7 +95,6 @@ class AwxInventory:
         Arguments:
             host_name {str} -- ID of the VM in source api. In vmware this would look like: vm-143230
         """
-
         # Remove host from all groups
         for k, v in self.groups.items():
             try:
@@ -127,6 +133,7 @@ class AwxInventory:
 
     def add_group_vars(self, group, group_vars):
         """Add vars to an existing group.
+        
            This will over write vars with matching keys.
 
         Arguments:
@@ -197,7 +204,6 @@ class AwxInventory:
         Keyword Arguments:
             encoder {module} -- Class to encode dict to output string. (default: {json})
         """
-
         # dict that will be dumped to screen.
         awx_inv = {}
 
