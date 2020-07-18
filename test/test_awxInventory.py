@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from inventory import AwxInventory
 
+
 class TestAwxInventory(TestCase):
 
     ##########################################
@@ -28,7 +29,6 @@ class TestAwxInventory(TestCase):
         self.assertDictEqual(inv.hosts, test_dict)
 
     def test_add_host_with_vars(self):
-
 
         inv = AwxInventory()
 
@@ -131,7 +131,6 @@ class TestAwxInventory(TestCase):
 
         with self.assertRaises(HostAlreadyExist):
             inv.add_host('host1')
-
 
     ##########################################
     #         remove_host Test
@@ -533,6 +532,7 @@ class TestAwxInventory(TestCase):
     #     export = inv.export()
     #
     #     self.assertDictEqual(export, {})
+
 
 if __name__ == '__main__':
     unittest.main()

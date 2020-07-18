@@ -99,7 +99,7 @@ class AwxInventory:
             host_name {str} -- ID of the VM in source api. In vmware this would look like: vm-143230
         """
         # Remove host from all groups
-        for k, v in self.groups.items():
+        for k, _ in self.groups.items():
             try:
                 self.groups[k]['hosts'].remove(host_name)
             except KeyError:
@@ -112,7 +112,6 @@ class AwxInventory:
             self.hosts.pop(host_name)
         except KeyError:
             pass
-
 
     def add_group(self, name, group_vars=None, hosts=None):
         """
@@ -173,7 +172,6 @@ class AwxInventory:
 
         self.groups.pop(group)
 
-
     def add_host_to_group(self, host, group):
         """
         Add host to group.
@@ -212,7 +210,7 @@ class AwxInventory:
 
         # Add 'all' group and add all host to group.
         self.add_group('all')
-        for k, v in self.hosts.items():
+        for k, _ in self.hosts.items():
             self.add_host_to_group(k, 'all')
 
         # Add non-empty groups to export.
