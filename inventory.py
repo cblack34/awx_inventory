@@ -6,36 +6,48 @@ import json
 
 class HostDoesNotExist(Exception):
 
-    """Used when trying to use a host that does not exist."""
+    """
+    Used when trying to use a host that does not exist.
+    """
     pass
 
 
 class HostAlreadyExist(Exception):
     
-    """Used when trying to add a host that already exist"""
+    """
+    Used when trying to add a host that already exist
+    """
     pass
 
 
 class GroupAlreadyExist(Exception):
     
-    """Used when trying to add a group that already exist."""
+    """
+    Used when trying to add a group that already exist.
+    """
     pass
 
 
 class GroupDoesNotExist(Exception):
     
-    """Used when trying to use a group that does not exist."""
+    """
+    Used when trying to use a group that does not exist.
+    """
 
 
 class AwxInventory:
     
-    """Inventory for Ansible and AWX.
+    """
+    Inventory for Ansible and AWX.
 
     Allows the creation of inventories to be used with Ansible.
     Can be used with any dict encoder that has a dumps method. see export method.
     """
 
     def __init__(self):
+        """ 
+        Create instance variables. 
+        """
         self.hosts = {}
         self.groups = {}
 
@@ -69,10 +81,9 @@ class AwxInventory:
                 self.add_host_to_group(name, group)
 
     def add_host_vars(self, name, host_vars):
-        """Add vars to an existing name.
-        
-           This will over write vars with matching keys.
-
+        """
+        Add vars to an existing name.
+        This will over write vars with matching keys.
         Arguments:
             :type name: str         -- ID of the VM in source api. In vmware this would look like: name-143230
             :type host_vars: dict   -- Vars that should be added to this name.
@@ -89,8 +100,8 @@ class AwxInventory:
             self.hosts[name][k] = v
 
     def remove_host(self, host_name):
-        """Remove a vm from the inventory.
-
+        """
+        Remove a vm from the inventory.
         Arguments:
             host_name {str} -- ID of the VM in source api. In vmware this would look like: vm-143230
         """
@@ -111,8 +122,8 @@ class AwxInventory:
 
 
     def add_group(self, name, group_vars=None, hosts=None):
-        """Add a group to inventory, Optionally add group vars, and Optionally add hosts of the group.
-
+        """
+        Add a group to inventory, Optionally add group vars, and Optionally add hosts of the group.
         Arguments:
             name {str} -- Name of the group
             vars {dict} -- Vars that should be added to this group
@@ -131,9 +142,9 @@ class AwxInventory:
                 self.add_host_to_group(host, name)
 
     def add_group_vars(self, group, group_vars):
-        """Add vars to an existing group.
-        
-           This will over write vars with matching keys.
+        """
+        Add vars to an existing group.
+        This will over write vars with matching keys.
 
         Arguments:
             :type group: str -- Name of group in inventory
@@ -171,8 +182,8 @@ class AwxInventory:
 
 
     def add_host_to_group(self, host, group):
-        """Add host to group.
-
+        """
+        Add host to group.
         Arguments:
             host {str}    -- ID of the VM in source api. In vmware this would look like: host-143230
             group {str} -- Name of group in inventory
@@ -199,7 +210,6 @@ class AwxInventory:
 
     def export(self, encoder=json):
         """Convert from object to string using the dumps method of the encoder class.
-
         Keyword Arguments:
             encoder {module} -- Class to encode dict to output string. (default: {json})
         """
