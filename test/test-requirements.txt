@@ -1,4 +1,4 @@
-attrs==19.1.0
+attrs==19.3.0
 coverage==4.5.3
 functools32==3.2.3.post2
 jsonschema==3.0.1
