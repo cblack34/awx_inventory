@@ -46,7 +46,7 @@ class AwxInventory:
 
     def add_host(self, name, host_vars=None, groups=None):
         """
-        Add a vm to inventory,
+        Add a vm to awx_inventory,
         Optionally add vars to that vm, and Optionally add groups to that vm.
         If groups are provided this function will create the group if it does not exist and
         then add the vm to the group.
@@ -94,7 +94,7 @@ class AwxInventory:
 
     def remove_host(self, host_name):
         """
-        Remove a vm from the inventory.
+        Remove a vm from the awx_inventory.
         Arguments:
             host_name {str} -- ID of the VM in source api. In vmware this would look like: vm-143230
         """
@@ -115,7 +115,7 @@ class AwxInventory:
 
     def add_group(self, name, group_vars=None, hosts=None):
         """
-        Add a group to inventory, Optionally add group vars, and Optionally add hosts of the group.
+        Add a group to awx_inventory, Optionally add group vars, and Optionally add hosts of the group.
         Arguments:
             name {str} -- Name of the group
             vars {dict} -- Vars that should be added to this group
@@ -139,7 +139,7 @@ class AwxInventory:
         This will over write vars with matching keys.
 
         Arguments:
-            :type group: str -- Name of group in inventory
+            :type group: str -- Name of group in awx_inventory
             :type group_vars: dict -- Vars that should be added to this group.
         """
         # Make sure the group exist
@@ -177,7 +177,7 @@ class AwxInventory:
         Add host to group.
         Arguments:
             host {str}    -- ID of the VM in source api. In vmware this would look like: host-143230
-            group {str} -- Name of group in inventory
+            group {str} -- Name of group in awx_inventory
         """
         # Make sure host exist
         try:
