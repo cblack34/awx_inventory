@@ -11,10 +11,10 @@ before_install:
   - pip install coveralls
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 install:
-  - pip install -r test/test-requirements.txt
+  - pip install -r awxinventory/test/test-requirements.txt
 script:
-  - coverage run --omit test/ test/test_awxInventory.py
-  - coverage xml --omit test/
+  - coverage run --omit awxinventory/test/ awxinventory/test/test_awxInventory.py
+  - coverage xml --omit awxinventory/test/
 after_success:
   - coveralls
   - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Python -r coverage.xml
