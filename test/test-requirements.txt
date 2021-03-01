@@ -1,5 +1,5 @@
 attrs==20.3.0
-coverage==5.3
+coverage==5.5
 functools32==3.2.3.post2; python_version < '3'
 jsonschema==3.2.0
 pyrsistent==0.16.1
